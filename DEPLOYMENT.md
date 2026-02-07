@@ -1,96 +1,94 @@
 # Deploying OopsAI
 
-This guide covers hosting with **Render** (backend) + **Vercel** (frontend) — both have free tiers.
+You can host everything on **Render** — both frontend and backend.
 
 ---
 
-## Overview
+## Option A: Both on Render (Recommended)
 
-| Part | Host | Free Tier |
+| Part | Type | Free Tier |
 |------|------|-----------|
-| Backend (Node.js) | Render | Yes — sleeps after inactivity |
-| Frontend (React) | Vercel | Yes |
+| Backend (Node.js) | Web Service | Yes — sleeps after inactivity |
+| Frontend (React) | Static Site | Yes |
 
 ---
 
-## Step 1: Deploy Backend to Render
+### Step 1: Deploy Backend
 
-1. **Push your code to GitHub** (if not already).
+1. Push your code to **GitHub**.
 
-2. Go to [render.com](https://render.com) and sign up with GitHub.
+2. Go to [render.com](https://render.com) → sign up with GitHub.
 
 3. **New** → **Web Service**.
 
 4. Connect your repo and configure:
-   - **Name:** `oopsai-api` (or any name)
+   - **Name:** `oopsai-api`
    - **Root Directory:** `server`
    - **Runtime:** Node
    - **Build Command:** `npm install`
    - **Start Command:** `npm start`
 
-5. **Environment Variables** (add these):
+5. **Environment Variables:**
    | Key | Value |
    |-----|-------|
    | `OPENAI_API_KEY` | Your OpenAI API key |
-   | `FRONTEND_URL` | `https://your-app.vercel.app` *(add after Step 2)* |
+   | `FRONTEND_URL` | Set after Step 2 — e.g. `https://oopsai.onrender.com` |
 
 6. Click **Create Web Service**.
 
-7. After deployment, copy your backend URL (e.g. `https://oopsai-api.onrender.com`).
+7. Copy your backend URL (e.g. `https://oopsai-api.onrender.com`).
 
 ---
 
-## Step 2: Deploy Frontend to Vercel
+### Step 2: Deploy Frontend (Static Site on Render)
 
-1. Go to [vercel.com](https://vercel.com) and sign up with GitHub.
+1. In the same Render dashboard: **New** → **Static Site**.
 
-2. **Add New** → **Project** → import your repo.
-
-3. Configure:
+2. Connect the **same** repo and configure:
+   - **Name:** `oopsai` (or any name — this becomes your URL)
    - **Root Directory:** `client`
-   - **Framework Preset:** Vite
-   - **Build Command:** `npm run build` (auto-detected)
-   - **Output Directory:** `dist` (auto-detected)
+   - **Build Command:** `npm install && npm run build`
+   - **Publish Directory:** `dist`
 
-4. **Environment Variables** (add this):
+3. **Environment Variables** (important — add before first deploy):
    | Key | Value |
    |-----|-------|
-   | `VITE_API_URL` | `https://your-render-url.onrender.com` *(from Step 1)* |
+   | `VITE_API_URL` | `https://oopsai-api.onrender.com` *(your backend URL from Step 1)* |
 
-5. Click **Deploy**.
+4. Click **Create Static Site**.
 
-6. Copy your frontend URL (e.g. `https://oopsai.vercel.app`).
+5. Copy your frontend URL (e.g. `https://oopsai.onrender.com`).
 
 ---
 
-## Step 3: Update Backend CORS
+### Step 3: Update CORS
 
-1. Go back to **Render** → your web service → **Environment**.
+1. Go to your **backend** service → **Environment**.
 
-2. Edit `FRONTEND_URL` and set it to your **Vercel URL** (e.g. `https://oopsai.vercel.app`).
+2. Set `FRONTEND_URL` to your **frontend URL** (e.g. `https://oopsai.onrender.com`).
 
-3. Save. Render will redeploy automatically.
+3. Save. Render redeploys automatically.
 
 ---
 
 ## Done
 
-Your app is live. The frontend will call the backend using `VITE_API_URL`.
+Both are on Render. Open your frontend URL to use the app.
 
 ---
 
 ## Render Free Tier Notes
 
-- **Spins down** after ~15 minutes of no requests.
+- Backend **spins down** after ~15 minutes of inactivity.
 - **First request** after sleep can take 30–60 seconds (cold start).
-- Consider upgrading or using Railway/Railway.app if you need always-on.
+- Static site stays up — no spin-down.
 
 ---
 
-## Alternative: Deploy Both on Railway
+## Option B: Render (Backend) + Vercel (Frontend)
 
-[Railway](https://railway.app) can host both frontend and backend:
+If you prefer Vercel for the frontend:
 
-1. Create a new project, add your GitHub repo.
-2. Add two services: one for `server`, one for `client`.
-3. Set env vars for each. Use the backend URL as `VITE_API_URL` for the frontend service.
+1. Deploy backend on Render (Step 1 above).
+2. Deploy frontend on [vercel.com](https://vercel.com): root dir `client`, add `VITE_API_URL` = backend URL.
+3. Set `FRONTEND_URL` on Render to your Vercel URL.
