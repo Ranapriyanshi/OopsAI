@@ -95,7 +95,7 @@ function App() {
       <div className="app-content">
         <section className="hero">
           <span className="hero-badge">AI-powered</span>
-          <h1>OopsAI</h1>
+          <h1>ExcuseAI</h1>
           <p className="hero-tagline">
             The ultimate excuse generator. Pick a scenario, choose your tone, and get believable excuses in seconds.
           </p>
