@@ -82,23 +82,26 @@ function App() {
 
   return (
     <div className="app">
-      <header className="header">
-        <div className="header-top">
-          <h1>OopsAI</h1>
-          <button
-            type="button"
-            className="theme-toggle"
-            onClick={toggleTheme}
-            title={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
-            aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-          >
-            {theme === 'light' ? '🌙' : '☀️'}
-          </button>
-        </div>
-        <p>Ultimate Excuse Generator</p>
-      </header>
+      <button
+        type="button"
+        className="theme-toggle"
+        onClick={toggleTheme}
+        title={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
+        aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+      >
+        {theme === 'light' ? '🌙' : '☀️'}
+      </button>
 
-      <main className="main">
+      <div className="app-content">
+        <section className="hero">
+          <span className="hero-badge">AI-powered</span>
+          <h1>OopsAI</h1>
+          <p className="hero-tagline">
+            The ultimate excuse generator. Pick a scenario, choose your tone, and get believable excuses in seconds.
+          </p>
+        </section>
+
+        <main className="main">
         <section className="input-section">
           <label htmlFor="scenario">What happened?</label>
           <textarea
@@ -186,7 +189,8 @@ function App() {
             ))}
           </div>
         </section>
-      </main>
+        </main>
+      </div>
     </div>
   )
 }
